@@ -1,0 +1,3 @@
+Package: *
+Pin: origin packages.prosody.im
+Pin-Priority: 1000

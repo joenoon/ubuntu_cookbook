@@ -1,0 +1,3 @@
+Package: *
+Pin: origin php53.dotdeb.org
+Pin-Priority: 1000

@@ -1,0 +1,7 @@
+<% @options.each do |(key, val)| %>
+  <% if !val.is_a?(String) || (val.is_a?(String) && /\A[\d.]*(GB|MB|KB|kB|s|ms|min|h|d)\Z/ =~ val) %>
+<%= key %> = <%= val %>
+  <% else %>
+<%= key %> = '<%= val %>'
+  <% end %>
+<% end %>    
