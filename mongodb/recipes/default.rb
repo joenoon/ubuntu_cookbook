@@ -1,3 +1,5 @@
+include_recipe "apt"
+
 execute "add mongodb key" do
   command "apt-key adv --keyserver keys.gnupg.net --recv 7F0CEB10"
   action :nothing

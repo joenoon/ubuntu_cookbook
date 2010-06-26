@@ -1,3 +1,5 @@
+include_recipe "apt"
+
 service "prosody" do
   supports :start => true, :stop => true, :restart => true, :reload => true
   action :nothing

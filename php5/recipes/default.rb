@@ -1,3 +1,5 @@
+include_recipe "apt"
+
 service "php" do
   service_name "php5-fpm"
   supports :start => true, :stop => true, :restart => true, :reload => true

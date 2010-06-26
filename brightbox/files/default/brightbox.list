@@ -1,2 +1,2 @@
-deb http://apt.brightbox.net/ lucid main
+#deb http://apt.brightbox.net/ lucid main
 deb http://apt.brightbox.net/ lucid rubyee

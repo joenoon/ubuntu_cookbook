@@ -1,3 +1,5 @@
+include_recipe "apt"
+
 execute "add brightbox key" do
   command "apt-key add /usr/local/src/brightbox-packages.key"
   action :nothing
