@@ -49,7 +49,7 @@ remote_file "/etc/apt/preferences.d/pin-php5" do
   mode "0644"
 end
 
-%w( php5-cli php5-common php5-suhosin php5-fpm php5-cgi ).each do |pkg_name| 
+%w( php5-cli php5-common php5-suhosin php5-fpm php5-cgi php5-sqlite php5-curl ).each do |pkg_name| 
   package pkg_name do
     action :install
     options "--allow-unauthenticated"

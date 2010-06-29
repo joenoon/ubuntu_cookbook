@@ -71,4 +71,6 @@ service "mysql" do
   action [ :start ]
 end
 
+include_recipe "ruby_enterprise"
+
 gem_package "mysql"
