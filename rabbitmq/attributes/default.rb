@@ -10,3 +10,5 @@ set_unless[:rabbitmq][:mnesiadir] = "/var/lib/rabbitmq/mnesia"
 set_unless[:rabbitmq][:cluster] = "no"
 set_unless[:rabbitmq][:cluster_config] = "/etc/rabbitmq/rabbitmq_cluster.config"
 set_unless[:rabbitmq][:cluster_disk_nodes] = []
+
+set_unless[:rabbitmq][:service] = [ :stop, :disable ]

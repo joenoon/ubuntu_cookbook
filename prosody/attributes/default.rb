@@ -1,5 +1,5 @@
 set_unless[:prosody][:admins] = []
-set_unless[:prosody][:use_libevent] = false
+set_unless[:prosody][:use_libevent] = true
 set_unless[:prosody][:modules_enabled] = %w(
   roster
   saslauth
@@ -8,12 +8,16 @@ set_unless[:prosody][:modules_enabled] = %w(
   disco
   private
   vcard
+  privacy
   legacyauth
   version
   uptime
   time
   ping
-  register
+  pep
+  posix
+  bosh
+  announce
 )
 set_unless[:prosody][:modules_disabled] = []
 set_unless[:prosody][:pidfile] = "/var/run/prosody/prosody.pid"
@@ -25,3 +29,5 @@ set_unless[:prosody][:log] = {
 set_unless[:prosody][:additional_config] = %q{VirtualHost "localhost"}
 set_unless[:prosody][:modules_path] = "/usr/lib/prosody/modules"
 set_unless[:prosody][:external_modules] = {}
+
+set_unless[:prosody][:service] = [ :stop, :disable ]

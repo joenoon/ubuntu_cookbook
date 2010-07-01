@@ -24,7 +24,9 @@ end
 service "postgresql" do
   service_name "postgresql-8.4"
   supports :start => true, :stop => true, :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-  subscribes :restart, resources(:template => postgresql_conf)
-  subscribes :reload, resources(:template => pg_hba_conf)
+  action node[:postgresql][:service]
+  if node[:postgresql][:service].include?("enable")
+    subscribes :restart, resources(:template => postgresql_conf)
+    subscribes :reload, resources(:template => pg_hba_conf)
+  end
 end

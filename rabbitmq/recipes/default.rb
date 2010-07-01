@@ -19,9 +19,8 @@ end
 service "rabbitmq" do
   service_name "rabbitmq-server"
   supports :status => true, :restart => true, :reload => true
-  action :nothing
-end
-
-service "rabbitmq" do
-  action [ :enable, :start ]
+  action node[:rabbitmq][:service]
+  if node[:rabbitmq][:service].include?("enable")
+    subscribes :restart, resources(:template => "/etc/rabbitmq/rabbitmq.conf")
+  end
 end

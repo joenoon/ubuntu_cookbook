@@ -24,9 +24,9 @@ end
 package "mongodb-stable"
 
 service "mongodb" do
-  restart_command "restart mongodb"
-  stop_command "stop mongodb"
-  start_command "start mongodb"
+  if File.exist?("/etc/init/mongodb.conf")
+    provider Chef::Provider::Service::Upstart
+  end
   supports :status => true, :restart => true, :reload => true
-  action [ :start ]
+  action node[:mongodb][:service]
 end

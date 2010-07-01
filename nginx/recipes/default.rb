@@ -10,5 +10,5 @@ end
 
 service "nginx" do
   supports :start => true, :stop => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  action node[:nginx][:service]
 end

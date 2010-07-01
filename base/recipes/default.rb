@@ -1,3 +1,5 @@
+execute "apt-get update"
+
 %w( 
   avahi-daemon 
   avahi-utils

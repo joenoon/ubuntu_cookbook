@@ -23,6 +23,7 @@ remote_file "/usr/local/src/libkrb.deb" do
   owner "root"
   group "root"
   mode "0644"
+  action :create_if_missing
   notifies :run, resources(:execute => "install libkrb"), :immediately
 end
 
@@ -31,6 +32,7 @@ remote_file "/usr/local/src/libicu.deb" do
   owner "root"
   group "root"
   mode "0644"
+  action :create_if_missing
   notifies :run, resources(:execute => "install libicu"), :immediately
 end
   
@@ -57,5 +59,5 @@ end
 end
 
 service "php" do
-  action [ :enable, :start ]
+  action node[:php5][:service]
 end

@@ -1,10 +1,5 @@
 include_recipe "apt"
 
-service "prosody" do
-  supports :start => true, :stop => true, :restart => true, :reload => true
-  action :nothing
-end
-
 execute "add prosody key" do
   command "apt-key add /usr/local/src/prosody-debian-packages.key"
   action :nothing
@@ -44,7 +39,6 @@ package "prosody"
     source opts[:source]
     mode "0644"
     checksum opts[:checksum] # openssl dgst -sha256
-    notifies :reload, resources(:service => "prosody")
   end
 end
 
@@ -53,10 +47,13 @@ template "/etc/prosody/prosody.cfg.lua" do
   group "root"
   source "prosody.cfg.lua.erb"
   mode "0755"
-  notifies :restart, resources(:service => "prosody")
 end
 
 service "prosody" do
-  action [ :enable, :start ]
+  supports :start => true, :stop => true, :restart => true, :reload => true
+  action node[:prosody][:service]
+  if node[:prosody][:service].include?("enable")
+    subscribes :restart, resources(:template => "/etc/prosody/prosody.cfg.lua")
+  end
 end
 

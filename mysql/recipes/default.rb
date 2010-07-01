@@ -36,20 +36,20 @@ package "libmysqlclient-dev"
 package "mysql-client"
 package "mysql-server"
 
-service "mysql" do
-  restart_command "restart mysql"
-  stop_command "stop mysql"
-  start_command "start mysql"
-  supports :status => true, :restart => true, :reload => true
-  action :nothing
-end
-
 template "/etc/mysql/my.cnf" do
   source "my.cnf.erb"
   owner "root"
   group "root"
   mode "0644"
-  notifies :restart, resources(:service => "mysql"), :immediately
+end
+
+service "mysql" do
+  provider Chef::Provider::Service::Upstart
+  supports :status => true, :restart => true, :reload => true
+  action node[:mysql][:service]
+  if node[:mysql][:service].include?("enable")
+    subscribes :restart, resources(:template => "/etc/mysql/my.cnf")
+  end
 end
 
 execute "mysql-install-privileges" do
@@ -63,14 +63,9 @@ template "/etc/mysql/grants.sql" do
   group "root"
   mode "0600"
   action :create
-  notifies :restart, resources(:service => "mysql"), :immediately
   notifies :run, resources(:execute => "mysql-install-privileges"), :immediately
+  only_if { 
+    puts node[:mysql][:service].inspect
+    node[:mysql][:service].include?("enable") 
+  }
 end
-
-service "mysql" do
-  action [ :start ]
-end
-
-include_recipe "ruby_enterprise"
-
-gem_package "mysql"
