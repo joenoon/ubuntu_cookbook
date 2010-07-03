@@ -22,21 +22,21 @@
   end
 end
 
-remote_file "/etc/rvmrc" do
+cookbook_file "/etc/rvmrc" do
   source "rvmrc"
   owner "root"
   group "root"
   mode "0755"
 end
 
-remote_file "/etc/profile.d/rvm_profile.sh" do
+cookbook_file "/etc/profile.d/rvm_profile.sh" do
   source "rvm_profile.sh"
   owner "root"
   group "root"
   mode "0755"
 end
 
-remote_file "/etc/gemrc" do
+cookbook_file "/etc/gemrc" do
   source "gemrc"
   owner "root"
   group "root"

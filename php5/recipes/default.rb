@@ -36,7 +36,7 @@ remote_file "/usr/local/src/libicu.deb" do
   notifies :run, resources(:execute => "install libicu"), :immediately
 end
   
-remote_file "/etc/apt/sources.list.d/php5.list" do
+cookbook_file "/etc/apt/sources.list.d/php5.list" do
   source "php5.list"
   owner "root"
   group "root"
@@ -44,7 +44,7 @@ remote_file "/etc/apt/sources.list.d/php5.list" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-remote_file "/etc/apt/preferences.d/pin-php5" do
+cookbook_file "/etc/apt/preferences.d/pin-php5" do
   source "pin-php5"
   owner "root"
   group "root"

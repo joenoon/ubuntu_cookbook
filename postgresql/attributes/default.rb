@@ -1,6 +1,6 @@
 set_unless[:postgresql][:version] = '8.4'
 
-version = @node[:postgresql][:version]
+version = postgresql[:version]
 
 set_unless[:postgresql][:pg_hba_conf] = "/etc/postgresql/#{version}/main/pg_hba.conf"
 set_unless[:postgresql][:postgresql_conf] = "/etc/postgresql/#{version}/main/postgresql.conf"

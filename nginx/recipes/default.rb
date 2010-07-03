@@ -1,6 +1,6 @@
 package "nginx"
 
-remote_file "/etc/nginx/php5_backend" do
+cookbook_file "/etc/nginx/php5_backend" do
   source "php5_backend"
   owner "root"
   group "root"

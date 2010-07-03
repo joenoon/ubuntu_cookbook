@@ -1,6 +1,6 @@
-version = @node[:postgresql][:version]
-pg_hba_conf = @node[:postgresql][:pg_hba_conf]
-postgresql_conf = @node[:postgresql][:postgresql_conf]
+version = node[:postgresql][:version]
+pg_hba_conf = node[:postgresql][:pg_hba_conf]
+postgresql_conf = node[:postgresql][:postgresql_conf]
 
 package "postgresql"
 package "postgresql-#{version}-postgis"
@@ -18,7 +18,7 @@ template postgresql_conf do
   owner "postgres"
   group "postgres"
   mode 0600
-  variables :options => @node[:postgresql][:config].to_a.select {|x| !x[1].nil? }.sort_by {|x| x[0] }
+  variables :options => node[:postgresql][:config].to_a.select {|x| !x[1].nil? }.sort_by {|x| x[0] }
 end
 
 service "postgresql" do

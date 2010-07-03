@@ -10,8 +10,8 @@ ruby_block "clean samba shares" do
   action :nothing
 end
 
-if @node[:samba][:enabled]
-  @node[:samba][:share] = @node[:samba][:share].to_s.gsub(" ", '\\\040')
+if node[:samba][:enabled]
+  node[:samba][:share] = node[:samba][:share].to_s.gsub(" ", '\\\040')
   template "/etc/samba/user" do
     source "user.erb"
     owner "root"
@@ -19,15 +19,15 @@ if @node[:samba][:enabled]
     mode "0400"
   end
   
-  directory @node[:samba][:mount]
+  directory node[:samba][:mount]
 
   bash "add samba share" do
     code %Q{
       set +e
-      umount #{@node[:samba][:mount]}
+      umount #{node[:samba][:mount]}
       set -e
       cat /etc/samba/current_mount >> /etc/fstab
-      mount #{@node[:samba][:mount]}
+      mount #{node[:samba][:mount]}
       true
     }
     action :nothing

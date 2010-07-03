@@ -13,7 +13,7 @@ remote_file "/usr/local/src/prosody-debian-packages.key" do
   notifies :run, resources(:execute => "add prosody key"), :immediately
 end
 
-remote_file "/etc/apt/sources.list.d/prosody.list" do
+cookbook_file "/etc/apt/sources.list.d/prosody.list" do
   source "prosody.list"
   owner "root"
   group "root"
@@ -21,7 +21,7 @@ remote_file "/etc/apt/sources.list.d/prosody.list" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-remote_file "/etc/apt/preferences.d/pin-prosody" do
+cookbook_file "/etc/apt/preferences.d/pin-prosody" do
   source "pin-prosody"
   owner "root"
   group "root"
@@ -32,8 +32,8 @@ package "liblua5.1-event-prosody0"
 package "lua-zlib"
 package "prosody"
 
-@node[:prosody][:external_modules].each_pair do |mod_name, opts|
-  remote_file "#{@node[:prosody][:modules_path]}/#{mod_name}.lua" do
+node[:prosody][:external_modules].each_pair do |mod_name, opts|
+  remote_file "#{node[:prosody][:modules_path]}/#{mod_name}.lua" do
     owner "root"
     group "root"
     source opts[:source]

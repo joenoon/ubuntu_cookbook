@@ -5,7 +5,7 @@ template "/etc/ssmtp/revaliases" do
   owner "root"
   group "root"
   mode "0644"
-  variables :content => @node[:ssmtp][:revaliases]
+  variables :content => node[:ssmtp][:revaliases]
 end
 
 template "/etc/ssmtp/ssmtp.conf" do
@@ -13,5 +13,5 @@ template "/etc/ssmtp/ssmtp.conf" do
   owner "root"
   group "root"
   mode "0644"
-  variables :content => @node[:ssmtp][:conf]
+  variables :content => node[:ssmtp][:conf]
 end
