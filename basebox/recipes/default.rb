@@ -5,6 +5,7 @@
   base
   java
   memcached
+  mongodb
   rabbitmq
   postgresql
   php5

@@ -58,6 +58,7 @@ define :unicorn_app, {
   
   if opts[:preflight]
     bash "preflight for #{opts[:name]}" do
+      cwd app_current_path
       code opts[:preflight]
       user opts[:owner]
       action :run

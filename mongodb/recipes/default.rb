@@ -26,9 +26,7 @@ end
 package "mongodb-stable"
 
 service "mongodb" do
-  if File.exist?("/etc/init/mongodb.conf")
-    provider Chef::Provider::Service::LucidUpstart
-  end
+  provider Chef::Provider::Service::LucidUpstart
   supports :status => true, :restart => true, :reload => true
   action service_action_state
 end
