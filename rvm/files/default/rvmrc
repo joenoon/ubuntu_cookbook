@@ -1,17 +1,19 @@
 export rvm_path=/usr/local/rvm
-export rvm_gems_path="$HOME/.rvm/gems"
-if [ ! -d "$rvm_gems_path" ]; then
-	mkdir -p "$rvm_gems_path"
-fi
-export rvm_gemsets_path="$HOME/.rvm/gemsets"
-if [ ! -d "$rvm_gemsets_path" ]; then
-	mkdir -p "$rvm_gemsets_path"
-fi
-export rvm_environments_path="$HOME/.rvm/environments"
-if [ ! -d "$rvm_environments_path" ]; then
-	mkdir -p "$rvm_environments_path"
-fi
-export rvm_wrappers_path="$HOME/.rvm/wrappers"
-if [ ! -d "$rvm_wrappers_path" ]; then
-	mkdir -p "$rvm_wrappers_path"
+if [ $(whoami) != "root" ] ; then
+  export rvm_gems_path="$HOME/.rvm/gems"
+  if [ ! -d "$rvm_gems_path" ]; then
+  	mkdir -p "$rvm_gems_path"
+  fi
+  export rvm_gemsets_path="$HOME/.rvm/gemsets"
+  if [ ! -d "$rvm_gemsets_path" ]; then
+  	mkdir -p "$rvm_gemsets_path"
+  fi
+  export rvm_environments_path="$HOME/.rvm/environments"
+  if [ ! -d "$rvm_environments_path" ]; then
+  	mkdir -p "$rvm_environments_path"
+  fi
+  export rvm_wrappers_path="$HOME/.rvm/wrappers"
+  if [ ! -d "$rvm_wrappers_path" ]; then
+  	mkdir -p "$rvm_wrappers_path"
+  fi
 fi

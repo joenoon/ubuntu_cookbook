@@ -52,17 +52,21 @@ remote_file "/usr/local/src/rvm-install-head" do
 end
 
 execute "/usr/local/src/rvm-install-head" do
+  user "root"
   creates "/usr/local/rvm"
 end
 
 execute "rvm install ree" do
+  user "root"
   not_if "test -e /usr/local/rvm/rubies/ree-1.8.7*"
 end
 
 execute "rvm install 1.9.2-head" do
+  user "root"
   not_if "test -e /usr/local/rvm/rubies/ruby-1.9.2-head"
 end
 
 execute "rvm --default ree" do
+  user "root"
   not_if "test -e /usr/local/rvm/rubies/default"
 end

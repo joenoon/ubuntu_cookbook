@@ -8,6 +8,9 @@ end
 
 cookbook_file "/etc/default/locale" do
   source "locale"
+  owner "root"
+  group "root"
+  mode "0644"
 end
 
 cookbook_file "/etc/curlrc" do
