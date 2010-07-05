@@ -23,4 +23,4 @@ set_unless[:postgresql][:config][:lc_time] = 'en_US.UTF-8'
 set_unless[:postgresql][:config][:default_text_search_config] = 'pg_catalog.english'
 set_unless[:postgresql][:config][:listen_addresses] = '127.0.0.1'
 
-set_unless[:postgresql][:service] = [ :stop, :disable ]
+set_unless[:postgresql][:enabled] = false

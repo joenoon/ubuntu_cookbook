@@ -1,5 +1,8 @@
 include_recipe "apt"
 
+service_action_state = node[:prosody].service_action_state
+service_enabled = node[:prosody].service_enabled?
+
 execute "add prosody key" do
   command "apt-key add /usr/local/src/prosody-debian-packages.key"
   action :nothing
@@ -51,8 +54,8 @@ end
 
 service "prosody" do
   supports :start => true, :stop => true, :restart => true, :reload => true
-  action node[:prosody][:service]
-  if node[:prosody][:service].include?("enable")
+  action service_action_state
+  if service_enabled
     subscribes :restart, resources(:template => "/etc/prosody/prosody.cfg.lua")
   end
 end

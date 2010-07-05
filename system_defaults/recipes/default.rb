@@ -6,22 +6,19 @@ execute "set system time" do
   action :run
 end
 
-template "/etc/default/locale" do
-  source "locale.erb"
+cookbook_file "/etc/default/locale" do
+  source "locale"
 end
 
-# set default rc confs
-
-template "/root/.gemrc" do
-  source "gemrc.erb"
+cookbook_file "/etc/curlrc" do
+  source "curlrc"
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
-template "/root/.curlrc" do
-  source "curlrc.erb"
-end
-
-template "/etc/hosts" do
-  source "hosts.erb"
+file "/etc/hosts" do
+  content node[:system_defaults][:hosts]
   owner "root"
   group "root"
   mode "0644"

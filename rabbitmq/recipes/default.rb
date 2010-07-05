@@ -1,3 +1,6 @@
+service_action_state = node[:rabbitmq].service_action_state
+service_enabled = node[:rabbitmq].service_enabled?
+
 directory "/etc/rabbitmq" do
   action :create
   owner "root"
@@ -19,8 +22,8 @@ end
 service "rabbitmq" do
   service_name "rabbitmq-server"
   supports :status => true, :restart => true, :reload => true
-  action node[:rabbitmq][:service]
-  if node[:rabbitmq][:service].include?("enable")
+  action service_action_state
+  if service_enabled
     subscribes :restart, resources(:template => "/etc/rabbitmq/rabbitmq.conf")
   end
 end

@@ -1,1 +1,1 @@
-set_unless[:memcached][:service] = [ :stop, :disable ]
+set_unless[:memcached][:enabled] = false

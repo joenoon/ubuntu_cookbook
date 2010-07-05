@@ -1,5 +1,7 @@
 include_recipe "apt"
 
+service_action_state = node[:mongodb].service_action_state
+
 execute "add mongodb key" do
   command "apt-key adv --keyserver keys.gnupg.net --recv 7F0CEB10"
   action :nothing
@@ -25,8 +27,8 @@ package "mongodb-stable"
 
 service "mongodb" do
   if File.exist?("/etc/init/mongodb.conf")
-    provider Chef::Provider::Service::Upstart
+    provider Chef::Provider::Service::LucidUpstart
   end
   supports :status => true, :restart => true, :reload => true
-  action node[:mongodb][:service]
+  action service_action_state
 end

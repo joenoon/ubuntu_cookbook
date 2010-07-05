@@ -1,3 +1,5 @@
+service_action_state = node[:postgresql].service_action_state
+service_enabled = node[:postgresql].service_enabled?
 version = node[:postgresql][:version]
 pg_hba_conf = node[:postgresql][:pg_hba_conf]
 postgresql_conf = node[:postgresql][:postgresql_conf]
@@ -24,8 +26,8 @@ end
 service "postgresql" do
   service_name "postgresql-8.4"
   supports :start => true, :stop => true, :status => true, :restart => true, :reload => true
-  action node[:postgresql][:service]
-  if node[:postgresql][:service].include?("enable")
+  action service_action_state
+  if service_enabled
     subscribes :restart, resources(:template => postgresql_conf)
     subscribes :reload, resources(:template => pg_hba_conf)
   end

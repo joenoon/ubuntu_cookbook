@@ -1,1 +1,1 @@
-set_unless[:php5][:service] = [ :stop, :disable ]
+set_unless[:php5][:enabled] = false

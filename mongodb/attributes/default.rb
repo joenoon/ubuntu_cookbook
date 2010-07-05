@@ -1,1 +1,1 @@
-set_unless[:mongodb][:service] = [ :stop, :disable ]
+set_unless[:mongodb][:enabled] = false

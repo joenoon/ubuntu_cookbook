@@ -1,5 +1,7 @@
 include_recipe "apt"
 
+service_action_state = node[:php5].service_action_state
+
 service "php" do
   service_name "php5-fpm"
   supports :start => true, :stop => true, :restart => true, :reload => true
@@ -59,5 +61,5 @@ end
 end
 
 service "php" do
-  action node[:php5][:service]
+  action service_action_state
 end

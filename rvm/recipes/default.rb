@@ -55,17 +55,6 @@ execute "/usr/local/src/rvm-install-head" do
   creates "/usr/local/rvm"
 end
 
-group "rvm" do
-  members %w( vagrant www-data )
-  append true
-end
-
-directory "/usr/local/rvm" do
-  mode "0775"
-  group "rvm"
-  recursive true
-end
-
 execute "rvm install ree" do
   not_if "test -e /usr/local/rvm/rubies/ree-1.8.7*"
 end

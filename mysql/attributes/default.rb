@@ -14,4 +14,4 @@ set_unless[:mysql][:tunable][:back_log]            = "128"
 set_unless[:mysql][:tunable][:table_cache]         = "128"
 set_unless[:mysql][:tunable][:max_heap_table_size] = "32M"
 
-set_unless[:mysql][:service] = [ :stop, :disable ]
+set_unless[:mysql][:enabled] = false

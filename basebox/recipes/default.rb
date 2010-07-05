@@ -4,7 +4,6 @@
   rvm
   base
   java
-  nfs_client
   memcached
   rabbitmq
   postgresql
@@ -14,6 +13,8 @@
   mysql
   nginx
   image_manip
+  deploy
+  nfs_client
 ).each do |r|
   include_recipe r
 end
