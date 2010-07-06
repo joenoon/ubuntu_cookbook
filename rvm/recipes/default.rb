@@ -22,13 +22,6 @@
   end
 end
 
-cookbook_file "/etc/rvmrc" do
-  source "rvmrc"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 cookbook_file "/etc/profile.d/rvm_profile.sh" do
   source "rvm_profile.sh"
   owner "root"
@@ -41,32 +34,4 @@ cookbook_file "/etc/gemrc" do
   owner "root"
   group "root"
   mode "0755"
-end
-
-remote_file "/usr/local/src/rvm-install-head" do
-  source "http://rvm.beginrescueend.com/releases/rvm-install-head"
-  owner "root"
-  group "root"
-  mode "0755"
-  action :create_if_missing
-end
-
-execute "/usr/local/src/rvm-install-head" do
-  user "root"
-  creates "/usr/local/rvm"
-end
-
-execute "rvm install ree" do
-  user "root"
-  not_if "test -e /usr/local/rvm/rubies/ree-1.8.7*"
-end
-
-execute "rvm install 1.9.2-head" do
-  user "root"
-  not_if "test -e /usr/local/rvm/rubies/ruby-1.9.2-head"
-end
-
-execute "rvm --default ree" do
-  user "root"
-  not_if "test -e /usr/local/rvm/rubies/default"
 end

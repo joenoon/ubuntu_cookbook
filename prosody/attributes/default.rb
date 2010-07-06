@@ -29,5 +29,3 @@ set_unless[:prosody][:log] = {
 set_unless[:prosody][:additional_config] = %q{VirtualHost "localhost"}
 set_unless[:prosody][:modules_path] = "/usr/lib/prosody/modules"
 set_unless[:prosody][:external_modules] = {}
-
-set_unless[:prosody][:enabled] = false

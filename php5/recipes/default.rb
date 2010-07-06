@@ -1,65 +1,26 @@
 include_recipe "apt"
 
-service_action_state = node[:php5].service_action_state
+%w( python-software-properties php5-cli php5-common php5-suhosin ).each { |x| package x }
+
+execute "add ppa" do
+  command "add-apt-repository ppa:brianmercer/php"
+  creates "/etc/apt/sources.list.d/brianmercer-php-lucid.list"
+  notifies :run, resources(:execute => "apt-get update"), :immediately
+end
+
+%w( php5-fpm php5-cgi php5-sqlite php5-curl ).each { |x| package x }
+
+ruby_block "edit php config" do
+  block do
+    conf = Chef::Util::FileEdit.new("/etc/php5/fpm/php5-fpm.conf")
+    conf.search_file_replace_line(/pm\.max_children = (?!#{node[:php5][:max_children]})/, "pm.max_children = #{node[:php5][:max_children]}")
+    conf.write_file
+  end
+  action :create
+end
 
 service "php" do
   service_name "php5-fpm"
   supports :start => true, :stop => true, :restart => true, :reload => true
-  action :nothing
-end
-
-execute "install libkrb" do
-  cwd "/usr/local/src"
-  command "dpkg -i libkrb.deb"
-  action :nothing
-end
-
-execute "install libicu" do
-  cwd "/usr/local/src"
-  command "dpkg -i libicu.deb"
-  action :nothing
-end
-
-remote_file "/usr/local/src/libkrb.deb" do
-  source "http://us.archive.ubuntu.com/ubuntu/pool/main/k/krb5/libkrb53_1.6.dfsg.4~beta1-5ubuntu2_i386.deb"
-  owner "root"
-  group "root"
-  mode "0644"
-  action :create_if_missing
-  notifies :run, resources(:execute => "install libkrb"), :immediately
-end
-
-remote_file "/usr/local/src/libicu.deb" do
-  source "http://us.archive.ubuntu.com/ubuntu/pool/main/i/icu/libicu38_3.8-6ubuntu0.2_i386.deb"
-  owner "root"
-  group "root"
-  mode "0644"
-  action :create_if_missing
-  notifies :run, resources(:execute => "install libicu"), :immediately
-end
-  
-cookbook_file "/etc/apt/sources.list.d/php5.list" do
-  source "php5.list"
-  owner "root"
-  group "root"
-  mode "0644"
-  notifies :run, resources(:execute => "apt-get update"), :immediately
-end
-
-cookbook_file "/etc/apt/preferences.d/pin-php5" do
-  source "pin-php5"
-  owner "root"
-  group "root"
-  mode "0644"
-end
-
-%w( php5-cli php5-common php5-suhosin php5-fpm php5-cgi php5-sqlite php5-curl ).each do |pkg_name| 
-  package pkg_name do
-    action :install
-    options "--allow-unauthenticated"
-  end
-end
-
-service "php" do
-  action service_action_state
+  action [ :enable, :start ]
 end

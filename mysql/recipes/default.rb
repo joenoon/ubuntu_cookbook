@@ -1,6 +1,3 @@
-service_action_state = node[:mysql].service_action_state
-service_enabled = node[:mysql].service_enabled?
-
 directory "/var/cache/local/preseeding" do
   owner "root"
   group "root"
@@ -49,10 +46,8 @@ end
 service "mysql" do
   provider Chef::Provider::Service::LucidUpstart
   supports :status => true, :restart => true, :reload => true
-  action service_action_state
-  if service_enabled
-    subscribes :restart, resources(:template => "/etc/mysql/my.cnf")
-  end
+  action [ :enable, :start ]
+  subscribes :restart, resources(:template => "/etc/mysql/my.cnf")
 end
 
 execute "mysql-install-privileges" do
@@ -67,5 +62,4 @@ template "/etc/mysql/grants.sql" do
   mode "0600"
   action :create
   notifies :run, resources(:execute => "mysql-install-privileges"), :immediately
-  only_if { service_enabled }
 end

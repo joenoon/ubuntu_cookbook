@@ -61,6 +61,7 @@ define :unicorn_app, {
       cwd app_current_path
       code opts[:preflight]
       user opts[:owner]
+      group opts[:group]
       action :run
     end
   end

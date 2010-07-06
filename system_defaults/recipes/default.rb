@@ -26,3 +26,16 @@ file "/etc/hosts" do
   group "root"
   mode "0644"
 end
+
+file "/etc/hostname" do
+  content node[:system_defaults][:hostname]
+  owner "root"
+  group "root"
+  mode "0644"
+end
+
+execute "service hostname start" do
+  action :nothing
+  subscribes :run, resources(:file => "/etc/hosts"), :immediately
+  subscribes :run, resources(:file => "/etc/hostname"), :immediately
+end

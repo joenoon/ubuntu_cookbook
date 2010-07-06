@@ -1,1 +1,1 @@
-set_unless[:php5][:enabled] = false
+set_unless[:php5][:max_children] = 1

@@ -13,7 +13,8 @@
   prosody
   mysql
   nginx
-  image_manip
+  imagemagick
+  freeimage
   deploy
   nfs_client
 ).each do |r|
