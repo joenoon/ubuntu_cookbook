@@ -28,9 +28,10 @@ define :install_rvm, :user => nil, :group => nil, :rubies => "ruby-1.8.7", :defa
     action :create_if_missing
   end
 
-  execute "#{home_dir}/rvm-install-head" do
+  bash "#{home_dir}/rvm-install-head" do
     user _user
     group _group
+    code "#{home_dir}/rvm-install-head"
     creates "#{home_dir}/.rvm"
   end
   
