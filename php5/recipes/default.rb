@@ -13,7 +13,7 @@ end
 ruby_block "edit php config" do
   block do
     conf = Chef::Util::FileEdit.new("/etc/php5/fpm/php5-fpm.conf")
-    conf.search_file_replace_line(/pm\.max_children = (?!#{node[:php5][:max_children]})/, "pm.max_children = #{node[:php5][:max_children]}")
+    conf.search_file_replace_line(/^pm\.max_children/, "pm.max_children = #{node[:php5][:max_children]}")
     conf.write_file
   end
   action :create
@@ -22,5 +22,5 @@ end
 service "php" do
   service_name "php5-fpm"
   supports :start => true, :stop => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  action [ :enable, :start, :reload ]
 end
