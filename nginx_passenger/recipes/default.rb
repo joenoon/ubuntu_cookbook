@@ -1,4 +1,4 @@
-include_recipe "rvm_as_root"
+include_recipe "rvm"
 
 bash "set passenger wrapper" do
   code "rvm default --passenger"
