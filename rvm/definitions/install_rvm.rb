@@ -1,4 +1,4 @@
-define :install_rvm, :user => nil, :group => nil, :rubies => "ruby-1.8.7", :default => nil do
+define :install_rvm, :user => nil, :group => nil, :rubies => "ruby-1.8.7", :default => nil, :use => nil do
 
   opts = params
   _user = opts[:user]
@@ -60,6 +60,13 @@ define :install_rvm, :user => nil, :group => nil, :rubies => "ruby-1.8.7", :defa
       rvm --default #{default}
     CODE
     not_if "test -e #{home_dir}/.rvm/rubies/default"
+  end
+  
+  if opts[:use]
+    use_rvm do
+      user _user
+      ruby default
+    end
   end
   
 end
