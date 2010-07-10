@@ -8,7 +8,11 @@ execute "add ppa" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-%w( php5-fpm php5-cgi php5-sqlite php5-curl ).each { |x| package x }
+%w( php5-fpm php5-cgi php5-sqlite php5-curl ).each do |x| 
+  package x do
+    options "--allow-unauthenticated"
+  end
+end
 
 ruby_block "edit php config" do
   block do
