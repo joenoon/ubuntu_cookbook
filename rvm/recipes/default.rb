@@ -1,3 +1,6 @@
+include_recipe "dos2unix"
+include_recipe "git"
+
 %w(
   build-essential
   bison
@@ -5,7 +8,6 @@
   libreadline6
   libreadline6-dev
   curl
-  git-core
   zlib1g
   zlib1g-dev
   libssl-dev
@@ -22,20 +24,6 @@
   end
 end
 
-cookbook_file "/etc/profile.d/rvm_profile.sh" do
-  source "rvm_profile.sh"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
-cookbook_file "/etc/rvmrc" do
-  source "rvmrc"
-  owner "root"
-  group "root"
-  mode "0755"
-end
-
 cookbook_file "/etc/gemrc" do
   source "gemrc"
   owner "root"
@@ -43,15 +31,25 @@ cookbook_file "/etc/gemrc" do
   mode "0755"
 end
 
-remote_file "/usr/local/src/rvm-install-head" do
-  source "http://rvm.beginrescueend.com/releases/rvm-install-head"
+remote_file "/usr/local/src/rvm-install-system-wide" do
+  source "http://bit.ly/rvm-install-system-wide"
   mode "0755"
   action :create_if_missing
 end
 
 bash "install rvm" do
-  code "/usr/local/src/rvm-install-head"
-  creates "/usr/local/rvm"
+  code %q{
+    sed -i 's/^"Running.*$/echo "Running the install script."\ndos2unix scripts\/\*/g' /usr/local/src/rvm-install-system-wide
+    /usr/local/src/rvm-install-system-wide
+  }
+  creates "/usr/local/bin/rvm"
+end
+
+cookbook_file "/etc/profile.d/rvm_profile.sh" do
+  source "rvm_profile.sh"
+  owner "root"
+  group "root"
+  mode "0755"
 end
 
 rubies = node[:rvm][:rubies].split(" ")
@@ -66,8 +64,8 @@ rubies.each do |ruby|
   
 end
 
-bash "rvm --default #{default_ruby}" do
-  code "rvm --default #{default_ruby}"
+bash "rvm #{default_ruby} --default" do
+  code "rvm #{default_ruby} --default"
   not_if "test -e /usr/local/rvm/rubies/default"
 end
 
