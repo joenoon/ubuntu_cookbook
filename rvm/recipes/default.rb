@@ -1,4 +1,4 @@
-include_recipe "dos2unix"
+#include_recipe "dos2unix"
 include_recipe "git"
 
 %w(
@@ -39,7 +39,8 @@ end
 
 bash "install rvm" do
   code %q{
-    sed -i 's/^"Running.*$/echo "Running the install script."\ndos2unix scripts\/\*/g' /usr/local/src/rvm-install-system-wide
+    sed -i 's/^"Running.*$/echo "Running the install script."/g' /usr/local/src/rvm-install-system-wide
+    sed -i 's/--depth 1 git/http/g' /usr/local/src/rvm-install-system-wide
     /usr/local/src/rvm-install-system-wide
   }
   creates "/usr/local/bin/rvm"

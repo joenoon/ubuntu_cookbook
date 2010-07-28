@@ -52,6 +52,6 @@ end
 service "prosody" do
   supports :start => true, :stop => true, :restart => true, :reload => true
   action [ :enable, :start ]
-  subscribes :restart, resources(:template => "/etc/prosody/prosody.cfg.lua")
+  subscribes :restart, resources(:template => "/etc/prosody/prosody.cfg.lua"), :immediately
 end
 
