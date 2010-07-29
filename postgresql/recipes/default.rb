@@ -5,6 +5,7 @@ postgresql_conf = node[:postgresql][:postgresql_conf]
 package "postgresql"
 package "postgresql-#{version}-postgis"
 package "postgresql-contrib-#{version}"
+package "postgresql-server-dev-#{version}"
 
 template pg_hba_conf do
   source "pg_hba.conf.erb"
