@@ -1,14 +1,5 @@
 execute "apt-get update"
 
-%w( 
-  avahi-daemon 
-  avahi-utils
-).each do |pkg_name|
-  package pkg_name do
-    action :remove
-  end
-end
-
 include_recipe "build-essential"
 
 %w(
