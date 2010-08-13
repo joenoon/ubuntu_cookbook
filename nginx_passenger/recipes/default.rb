@@ -27,6 +27,11 @@ template "/etc/init.d/nginx" do
   mode "0755"
 end
 
+service "nginx" do
+  supports :start => true, :stop => true, :restart => true, :reload => true
+  action [ :enable ]
+end
+
 template "/opt/nginx/conf/nginx.conf" do
   source "nginx.conf"
   mode "0644"
@@ -47,6 +52,5 @@ cookbook_file "/opt/nginx/conf/php5_backend" do
 end
 
 service "nginx" do
-  supports :start => true, :stop => true, :restart => true, :reload => true
-  action [ :enable, :start ]
+  action [ :start ]
 end
