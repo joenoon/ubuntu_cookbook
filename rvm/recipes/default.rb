@@ -1,4 +1,3 @@
-#include_recipe "dos2unix"
 include_recipe "git"
 
 %w(
@@ -38,11 +37,7 @@ remote_file "/usr/local/src/rvm-install-system-wide" do
 end
 
 bash "install rvm" do
-  code %q{
-    sed -i 's/^"Running.*$/echo "Running the install script."/g' /usr/local/src/rvm-install-system-wide
-    sed -i 's/--depth 1 git/http/g' /usr/local/src/rvm-install-system-wide
-    /usr/local/src/rvm-install-system-wide
-  }
+  code "/usr/local/src/rvm-install-system-wide"
   creates "/usr/local/bin/rvm"
 end
 
@@ -84,3 +79,16 @@ ruby_block "set full env" do
     end
   end
 end
+
+=begin
+
+Uninstall:
+
+{
+rm -rf /usr/local/src/rvm-install-system-wide
+rm -rf /usr/local/bin/rvm
+rm -rf /etc/profile.d/rvm_profile.sh
+rm -rf /usr/local/rvm
+}
+
+=end

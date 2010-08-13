@@ -10,7 +10,7 @@ rvm_gem "passenger" do
 end
 
 execute "install passenger" do
-  command %Q{INSTALLER=`which passenger-install-nginx-module`; sudo sh -c "$INSTALLER --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"}
+  command "passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
   creates "/opt/nginx/sbin/nginx"
 end
 
