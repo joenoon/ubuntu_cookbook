@@ -9,10 +9,6 @@ rvm_gem "passenger" do
   action :install
 end
 
-execute "env" do
-  action :run
-end
-
 execute "install passenger" do
   command "passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
   creates "/opt/nginx/sbin/nginx"
@@ -34,17 +30,20 @@ end
 template "/opt/nginx/conf/nginx.conf" do
   source "nginx.conf"
   mode "0644"
+  notifies :restart, resources(:service => "nginx")
 end
 
 template "/opt/nginx/conf/conf.d/passenger.conf" do
   source "passenger.conf"
   mode "0644"
+  notifies :restart, resources(:service => "nginx")
 end
 
 cookbook_file "/opt/nginx/conf/php5_backend" do
   source "php5_backend"
   backup false
   mode "0644"
+  notifies :restart, resources(:service => "nginx")
 end
 
 service "nginx" do
