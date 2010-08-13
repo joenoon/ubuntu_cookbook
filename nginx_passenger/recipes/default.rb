@@ -9,8 +9,12 @@ rvm_gem "passenger" do
   action :install
 end
 
+execute "env" do
+  action :run
+end
+
 execute "install passenger" do
-  command "rvmsudo passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
+  command "passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
   creates "/opt/nginx/sbin/nginx"
 end
 
