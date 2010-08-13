@@ -90,6 +90,8 @@ root:		<%= node[:postfix][:admin_email] %>
 # Generic bit-bucket
 devnull:	/dev/null
 
+<% if node[:postfix][:aliases] %>
 <% node[:postfix][:aliases].each do |target, command| %>
 <%= target %>:  "<%= command %>"
+<% end %>
 <% end %>
