@@ -11,7 +11,7 @@ end
 
 execute "install passenger" do
   command "passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
-  creates "/opt/nginx"
+  creates "/opt/nginx/sbin/nginx"
 end
 
 directory "/opt/nginx/conf/conf.d" do
