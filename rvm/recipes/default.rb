@@ -89,6 +89,7 @@ rm -rf /usr/local/src/rvm-install-system-wide
 rm -rf /usr/local/bin/rvm
 rm -rf /etc/profile.d/rvm_profile.sh
 rm -rf /usr/local/rvm
+find /usr/local/bin -type l 2>/dev/null | xargs file | grep 'broken symbolic link' | cut -f 1 -d ":" | xargs -n 1 rm
 }
 
 =end
