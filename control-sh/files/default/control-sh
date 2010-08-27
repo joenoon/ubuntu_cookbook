@@ -1,0 +1,101 @@
+#!/bin/sh
+
+# control-sh
+# easy start/stop/restart creation
+#
+# Copyright 2010 Joe Noon (joe[at]stat.im) (http://stat.im)
+#
+# place this file at /usr/local/lib/control-sh
+#
+# example, somescript.sh:
+#
+#   #!/bin/sh
+#   lockfile="/some/path/to/lockfile.pid"
+#   cmd="node app.js"
+#   . /usr/local/lib/control-sh
+#
+# required vars: lockfile, cmd
+# restart will start the process if not already running
+
+set -u
+set -e
+
+waitonlive() {
+  if [ -n "$1" ]; then
+    echo -n "waiting for $1 to live..."
+    until (kill -0 "$1" > /dev/null 2>&1); do
+      sleep 1
+    done
+    echo "done."
+  fi
+}
+
+waitonkill() {
+  if [ -n "$1" ]; then
+    echo -n "waiting for $1 to die..."
+    while (kill -0 "$1" > /dev/null 2>&1); do
+      sleep 1
+    done
+    echo "done."
+  fi
+}
+
+usage() {
+  echo "Usage: [start|stop]"
+}
+
+running() {
+  if [ -e "$lockfile" ]; then
+    pid=`cat $lockfile`
+    if [ -n "$pid" ]; then
+      if (kill -0 "$pid" > /dev/null 2>&1); then
+        return 0
+      fi
+    fi
+  fi
+  return 1
+}
+
+stop() {
+  if (running); then
+    local pid=`cat $lockfile`
+    kill $pid
+    waitonkill $pid
+  fi
+  rm -f $lockfile
+}
+
+start() {
+  if (running); then
+    echo "running"
+  else
+    setsid $cmd > /dev/null 2>&1 &
+    local runpid=$!
+    echo "$runpid" > "$lockfile"
+    waitonlive $runpid
+  fi
+}
+
+case $1 in
+  stop)
+    stop
+    ;;
+  start)
+    start
+    ;;
+  restart)
+    stop
+    start
+    ;;
+  status)
+    if running; then
+      echo "running"
+    else
+      echo "not running"
+    fi
+    ;;
+  *)
+    usage
+    exit 1
+    ;;
+esac
