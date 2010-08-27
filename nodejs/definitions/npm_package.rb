@@ -1,5 +1,5 @@
 define :npm_package, :args => nil, :libdir => nil do
-  include_recipe "node"
+  include_recipe "nodejs"
   _name = params[:name]
   _args = params[:args] || _name
   _libdir = params[:libdir] || "/usr/local/lib/node"
