@@ -1,16 +1,19 @@
-include_recipe "rvm"
+# only tested with rvm
 
 bash "set passenger wrapper" do
   code "rvm default --passenger"
   creates "/usr/local/bin/passenger_ruby"
 end
 
-rvm_gem "passenger" do
+rvm_gem_package "passenger" do
   action :install
 end
 
-execute "install passenger" do
-  command "passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'"
+bash "install passenger" do
+  code %q{
+    . /usr/local/lib/rvm
+    passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'
+  }
   creates "/opt/nginx/sbin/nginx"
 end
 
@@ -38,9 +41,16 @@ template "/opt/nginx/conf/nginx.conf" do
   notifies :restart, resources(:service => "nginx")
 end
 
-template "/opt/nginx/conf/conf.d/passenger.conf" do
-  source "passenger.conf"
-  mode "0644"
+bash "passenger config" do
+  code %Q{
+    . /usr/local/lib/rvm
+    passenger_root=`passenger-config --root`
+    passenger_ruby="/usr/local/bin/passenger_ruby"
+    echo "passenger_root ${passenger_root};" > /opt/nginx/conf/conf.d/passenger.conf
+    echo "passenger_ruby ${passenger_ruby};" >> /opt/nginx/conf/conf.d/passenger.conf
+    chmod 0644 /opt/nginx/conf/conf.d/passenger.conf
+  }
+  creates "/opt/nginx/conf/conf.d/passenger.conf"
   notifies :restart, resources(:service => "nginx")
 end
 
