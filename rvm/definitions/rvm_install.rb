@@ -4,8 +4,9 @@ define :rvm_install do
   bash "rvm install #{rb}" do
     code %Q{
       rvm install #{rb}
-      rvm #{rb} gem install rake bundler
+      rvm wrapper #{rb} #{rb}
+      /usr/local/rvm/bin/#{rb}_gem install rake bundler
     }
-    not_if "rvm use #{rb}"
+    only_if "rvm use #{rb} | grep not | grep installed"
   end
 end

@@ -1,12 +1,12 @@
 # only tested with rvm
 
-bash "set passenger wrapper" do
-  code "rvm default --passenger"
-  creates "/usr/local/bin/passenger_ruby"
-end
+rbv = node[:nginx_passenger][:ruby_wrapper]
+
+rvm_install rbv
 
 rvm_gem_package "passenger" do
   action :install
+  ruby_wrapper rbv
 end
 
 bash "install passenger" do
@@ -45,7 +45,7 @@ bash "passenger config" do
   code %Q{
     . /usr/local/lib/rvm
     passenger_root=`passenger-config --root`
-    passenger_ruby="/usr/local/bin/passenger_ruby"
+    passenger_ruby="/usr/local/rvm/bin/#{rbv}_ruby"
     echo "passenger_root ${passenger_root};" > /opt/nginx/conf/conf.d/passenger.conf
     echo "passenger_ruby ${passenger_ruby};" >> /opt/nginx/conf/conf.d/passenger.conf
     chmod 0644 /opt/nginx/conf/conf.d/passenger.conf
