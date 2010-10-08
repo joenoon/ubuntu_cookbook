@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # control-sh
-# easy start/stop/restart creation
+# easy start/stop/restart/signal creation
 #
 # Copyright 2010 Joe Noon (joe[at]stat.im) (http://stat.im)
 #
@@ -9,15 +9,41 @@
 #
 # example, somescript.sh:
 #
-#   #!/bin/sh
-#   lockfile="/some/path/to/lockfile.pid"
-#   cmd="node app.js"
-#   . /usr/local/lib/control-sh
+# ==============================
+# #!/bin/sh
+# 
+# RAILS_ROOT=`pwd`
+# STDOUT_FILE="$RAILS_ROOT/log/resque-pool.out.log"
+# STDERR_FILE="$RAILS_ROOT/log/resque-pool.err.log"
+# lockfile="$RAILS_ROOT/tmp/pids/resque-pool.pid"
+# 
+# runcmd() {
+#   nohup env rake resque:pool >> "$STDOUT_FILE" 2>> "$STDERR_FILE" < /dev/null &
+# }
+# 
+# details() {
+#   echo -n "Current pool: "
+#   if [ -e "$lockfile" ]; then
+#     echo `cat $lockfile`
+#   else
+#     echo "no pid"
+#   fi
+#   ps -ef f | grep [r]esque | grep -v $$
+# }
+# . /usr/local/lib/control-sh
+# ==============================
 #
-# required vars: lockfile, cmd
+# required vars: 
+#   lockfile   (e.g. /tmp/myapp.pid)
+# optional vars:
+#   stop_sig   (e.g. TERM (default), INT, QUIT, KILL, etc)
+# required functions:
+#   runcmd     (should background the process using nohup, lockfile will be updated with PID automatically)
+# optional functions:
+#   details    (any output you want to show for this process)
+#
 # restart will start the process if not already running
 
-set -u
 set -e
 
 waitonlive() {
@@ -40,8 +66,16 @@ waitonkill() {
   fi
 }
 
+sig() {
+  if [ -n "$1" ]; then
+    pid=`cat $lockfile`
+    kill -$1 $pid
+    echo "sent $1 to $pid"
+  fi
+}
+
 usage() {
-  echo "Usage: [start|stop]"
+  echo "Usage: [start|stop|restart|status|details|sig]"
 }
 
 running() {
@@ -59,7 +93,11 @@ running() {
 stop() {
   if (running); then
     local pid=`cat $lockfile`
-    kill $pid
+    if [ -n "$stop_sig" ]; then
+      sig $stop_sig
+    else
+      sig "TERM"
+    fi
     waitonkill $pid
   fi
   rm -f $lockfile
@@ -69,10 +107,13 @@ start() {
   if (running); then
     echo "running"
   else
-    setsid $cmd > /dev/null 2>&1 &
-    local runpid=$!
-    echo "$runpid" > "$lockfile"
-    waitonlive $runpid
+    if (type runcmd | grep "function" > /dev/null 2>&1); then
+      runcmd
+      echo $! > $lockfile
+      waitonlive `cat $lockfile`
+    else
+      echo "runcmd is not defined!"
+    fi
   fi
 }
 
@@ -86,6 +127,18 @@ case $1 in
   restart)
     stop
     start
+    ;;
+  details)
+    if (type details | grep "function" > /dev/null 2>&1); then
+      details
+    fi
+    ;;
+  sig)
+    if [ -n "$2" ]; then
+      sig $2
+    else
+      echo "no signal given!"
+    fi
     ;;
   status)
     if running; then
