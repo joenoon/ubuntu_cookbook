@@ -70,19 +70,6 @@ template "/opt/nginx/conf/nginx.conf" do
   notifies :restart, resources(:service => "nginx")
 end
 
-# bash "passenger config" do
-#   code %Q{
-#     . /usr/local/lib/rvm
-#     passenger_root=`passenger-config --root`
-#     passenger_ruby="/usr/local/rvm/bin/#{rbv}_ruby"
-#     echo "passenger_root ${passenger_root};" > /opt/nginx/conf/conf.d/passenger.conf
-#     echo "passenger_ruby ${passenger_ruby};" >> /opt/nginx/conf/conf.d/passenger.conf
-#     chmod 0644 /opt/nginx/conf/conf.d/passenger.conf
-#   }
-#   creates "/opt/nginx/conf/conf.d/passenger.conf"
-#   notifies :restart, resources(:service => "nginx")
-# end
-# 
 cookbook_file "/opt/nginx/conf/php5_backend" do
   source "php5_backend"
   backup false
