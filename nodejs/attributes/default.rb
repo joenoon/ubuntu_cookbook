@@ -1,1 +1,1 @@
-set_unless[:nodejs][:version] = "0.2.3"
+set_unless[:nodejs][:version] = "0.2.6"
