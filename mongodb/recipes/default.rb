@@ -13,8 +13,9 @@ template "/etc/apt/sources.list.d/mongodb.list" do
   source "mongodb.list.erb"
 end
 
+package "mongodb-#{node[:mongodb][:mongo_branch]}"
+
 service "mongodb" do
-  provider Chef::Provider::Service::LucidUpstart
   supports :status => true, :restart => true, :reload => true
   action [ :enable, :start ]
 end
