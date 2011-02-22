@@ -69,7 +69,7 @@ template "/opt/nginx/conf/conf.d/passenger.conf" do
   mode "0644"
   notifies :restart, resources(:service => "nginx")
   variables :passenger_root => "/usr/local/src/#{node[:nginx_rvmruby_passenger3_push][:passenger_extracts_to]}".to_s.strip,
-            :passenger_ruby => `bash -l -c "echo $MY_RUBY_HOME"`.to_s.strip
+            :passenger_ruby_home => `bash -l -c "echo $MY_RUBY_HOME"`.to_s.strip
 end
 
 template "/opt/nginx/conf/nginx.conf" do
