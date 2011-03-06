@@ -11,6 +11,7 @@ end
 
 template "/etc/apt/sources.list.d/mongodb.list" do
   source "mongodb.list.erb"
+  notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
 package "mongodb-#{node[:mongodb][:mongo_branch]}"
