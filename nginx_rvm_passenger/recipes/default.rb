@@ -57,8 +57,6 @@ template "#{node[:nginx_rvm_passenger][:prefix]}/conf/conf.d/passenger.conf" do
   source "passenger.conf"
   mode "0644"
   notifies :restart, resources(:service => "nginx")
-  variables :passenger_root => File.read("#{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_root").to_s.strip,
-            :passenger_ruby => File.read("#{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_ruby").to_s.strip
 end
 
 template "#{node[:nginx_rvm_passenger][:prefix]}/conf/nginx.conf" do
