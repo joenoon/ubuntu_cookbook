@@ -37,12 +37,28 @@ service "nginx" do
   action [ :enable ]
 end
 
+bash "cache passenger_root path" do
+  code %Q{
+    . /usr/local/lib/rvm
+    rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}
+    passenger-config --root > #{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_root
+  }
+end
+
+bash "cache passenger_ruby path" do
+  code %Q{
+    . /usr/local/lib/rvm
+    rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}
+    which ruby > #{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_ruby
+  }
+end
+
 template "#{node[:nginx_rvm_passenger][:prefix]}/conf/conf.d/passenger.conf" do
   source "passenger.conf"
   mode "0644"
   notifies :restart, resources(:service => "nginx")
-  variables :passenger_root => `bash -l -c ". /usr/local/lib/rvm; rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}; passenger-config --root"`.to_s.strip,
-            :passenger_ruby_home => `bash -l -c ". /usr/local/lib/rvm; rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}; which ruby"`.to_s.strip
+  variables :passenger_root => File.read("#{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_root").to_s.strip,
+            :passenger_ruby => File.read("#{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_ruby").to_s.strip
 end
 
 template "#{node[:nginx_rvm_passenger][:prefix]}/conf/nginx.conf" do
