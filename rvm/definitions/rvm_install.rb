@@ -8,4 +8,5 @@ define :rvm_install do
     }
     only_if "rvm use #{rb} | grep not | grep installed"
   end
+  rvm_default(node[:rvm][:default] || rb)
 end
