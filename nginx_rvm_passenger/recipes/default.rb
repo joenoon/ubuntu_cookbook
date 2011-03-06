@@ -14,7 +14,7 @@ bash "install passenger" do
     rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}
     passenger-install-nginx-module --auto --auto-download --prefix=#{node[:nginx_rvm_passenger][:prefix]} --extra-configure-flags='--with-http_ssl_module'
   }
-  create "#{node[:nginx_rvm_passenger][:prefix]}/sbin/nginx"
+  creates "#{node[:nginx_rvm_passenger][:prefix]}/sbin/nginx"
 end
 
 directory "#{node[:nginx_rvm_passenger][:prefix]}/conf/conf.d" do
