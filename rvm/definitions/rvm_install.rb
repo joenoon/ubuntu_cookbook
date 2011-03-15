@@ -2,11 +2,14 @@ define :rvm_install do
   rb = params[:name]
   include_recipe "rvm"
   bash "rvm install #{rb}" do
-    code %Q{
-      rvm install #{rb}
-      rvm wrapper #{rb} #{rb}
-      /usr/local/rvm/bin/#{rb}_gem install rake bundler
-    }
-    only_if "rvm use #{rb} | grep not | grep installed"
+    code "rvm install #{rb}"
+    not_if "rvm list strings | grep #{rb}"
   end
+  %w( rake bundler rack chef ).each do |g|
+    rvm_gem_package g do
+      action :install
+      ruby_wrapper rb
+    end
+  end
+  rvm_default(node[:rvm][:default] || rb)
 end
