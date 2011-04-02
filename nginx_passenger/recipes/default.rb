@@ -11,7 +11,7 @@ end
 
 bash "install passenger" do
   code %q{
-    . /usr/local/lib/rvm
+    . /usr/local/rvm/scripts/rvm
     passenger-install-nginx-module --auto --auto-download --prefix=/opt/nginx --extra-configure-flags='--with-http_ssl_module'
   }
   creates "/opt/nginx/sbin/nginx"
@@ -43,7 +43,7 @@ end
 
 bash "passenger config" do
   code %Q{
-    . /usr/local/lib/rvm
+    . /usr/local/rvm/scripts/rvm
     passenger_root=`passenger-config --root`
     passenger_ruby="/usr/local/rvm/bin/#{rbv}_ruby"
     echo "passenger_root ${passenger_root};" > /opt/nginx/conf/conf.d/passenger.conf

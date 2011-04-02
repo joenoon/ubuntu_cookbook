@@ -23,7 +23,7 @@ end
 
 bash "install passenger" do
   code %Q{
-    . /usr/local/lib/rvm
+    . /usr/local/rvm/scripts/rvm
     set -v
     set -x
     cd /usr/local/src

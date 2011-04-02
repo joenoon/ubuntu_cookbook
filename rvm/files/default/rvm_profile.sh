@@ -1,1 +1,1 @@
-. /usr/local/lib/rvm
+. /usr/local/rvm/scripts/rvm
