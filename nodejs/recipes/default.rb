@@ -1,15 +1,16 @@
-dl_node_dir = "node-v#{node[:nodejs][:version]}"
-tgz_node = "#{dl_node_dir}.tar.gz"
-usr_src_file = "/usr/local/src/#{tgz_node}"
-url_node = "http://nodejs.org/dist/#{tgz_node}"
+nodev = '0.4.3'
+npmv = '0.3.17'
+node_src_tgz = "/usr/local/src/node-v#{nodev}.tar.gz"
+npm_src_tgz = "/usr/local/src/npm-v#{npmv}.tar.gz"
 
 execute "install nodejs" do
   user "root"
   cwd "/usr/local/src"
   command [
-    "rm -rf #{dl_node_dir}",
-    "tar zxf #{tgz_node}",
-    "cd #{dl_node_dir}",
+    "rm -rf node-v#{nodev}",
+    "mkdir node-v#{nodev}",
+    "cd node-v#{nodev}",
+    "tar xzf #{node_src_tgz} --strip-components=1",
     "./configure",
     "make",
     "make install"
@@ -17,8 +18,8 @@ execute "install nodejs" do
   action :nothing
 end
 
-remote_file usr_src_file do
-  source url_node
+cookbook_file node_src_tgz do
+  source "node-v#{nodev}.tar.gz"
   owner "root"
   group "root"
   mode "0755"
@@ -29,12 +30,18 @@ end
 execute "install npm" do
   user "root"
   cwd "/usr/local/src"
-  command "./npm-install.sh"
+  command [
+    "rm -rf npm-v#{npmv}",
+    "mkdir npm-v#{npmv}",
+    "cd npm-v#{npmv}",
+    "tar xzf #{npm_src_tgz} --strip-components=1",
+    "node cli.js install ."
+  ].join(" && ")
   action :nothing
 end
 
-remote_file "/usr/local/src/npm-install.sh" do
-  source "http://npmjs.org/install.sh"
+cookbook_file npm_src_tgz do
+  source "npm-v#{npmv}.tar.gz"
   owner "root"
   group "root"
   mode "0755"
