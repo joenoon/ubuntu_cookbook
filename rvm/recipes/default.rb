@@ -30,14 +30,14 @@ cookbook_file "/etc/gemrc" do
   mode "0755"
 end
 
-remote_file "/usr/local/src/rvm-install-system-wide" do
-  source "http://bit.ly/rvm-install-system-wide"
+cookbook_file "/usr/local/src/rvm-install" do
+  source "install.sh"
   mode "0755"
-  action :create_if_missing
+  backup false
 end
 
 bash "install rvm" do
-  code "/usr/local/src/rvm-install-system-wide"
+  code "/usr/local/src/rvm-install"
   creates "/usr/local/bin/rvm"
 end
 
