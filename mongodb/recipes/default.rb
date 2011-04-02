@@ -9,12 +9,13 @@ execute "add mongo gpg key" do
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-template "/etc/apt/sources.list.d/mongodb.list" do
-  source "mongodb.list.erb"
+cookbook_file "/etc/apt/sources.list.d/mongodb.list" do
+  source "mongodb.list"
+  backup false
   notifies :run, resources(:execute => "apt-get update"), :immediately
 end
 
-package "mongodb-#{node[:mongodb][:mongo_branch]}"
+package "mongodb-10gen"
 
 service "mongodb" do
   supports :status => true, :restart => true, :reload => true
