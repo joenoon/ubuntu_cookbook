@@ -12,6 +12,7 @@ bash "install passenger" do
   code %Q{
     . /usr/local/rvm/scripts/rvm
     rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}
+    rvm wrapper #{node[:nginx_rvm_passenger][:ruby_wrapper]} passenger
     passenger-install-nginx-module --auto --auto-download --prefix=#{node[:nginx_rvm_passenger][:prefix]} --extra-configure-flags='--with-http_ssl_module'
   }
   creates "#{node[:nginx_rvm_passenger][:prefix]}/sbin/nginx"
@@ -49,7 +50,7 @@ bash "cache passenger_ruby path" do
   code %Q{
     . /usr/local/rvm/scripts/rvm
     rvm use #{node[:nginx_rvm_passenger][:ruby_wrapper]}
-    which ruby > #{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_ruby
+    which passenger_ruby > #{node[:nginx_rvm_passenger][:prefix]}/cache_passenger_ruby
   }
 end
 
